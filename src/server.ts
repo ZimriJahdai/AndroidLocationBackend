@@ -17,6 +17,16 @@ const formSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
+    className: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    leaderName: {
+      type: String,
+      required: true,
+      trim: true
+    },
     phone: {
       type: String,
       required: true,
@@ -50,16 +60,18 @@ const Form = mongoose.model('Form', formSchema);
 
 app.post('/api/forms', async (req, res) => {
   try {
-    const { fullName, phone, comment, location } = req.body;
+    const { fullName, className, leaderName, phone, comment, location } = req.body;
 
-    if (!fullName || !phone || !location?.latitude || !location?.longitude) {
+    if (!fullName || !className || !leaderName || !phone || !location?.latitude || !location?.longitude) {
       return res.status(400).json({
-        message: 'Nombre, teléfono y ubicación son obligatorios'
+        message: 'Nombre, clase, encargado, teléfono y ubicación son obligatorios'
       });
     }
 
     const form = await Form.create({
       fullName,
+      className,
+      leaderName,
       phone,
       comment,
       location
